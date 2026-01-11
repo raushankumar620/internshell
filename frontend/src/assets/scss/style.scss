@@ -1,0 +1,259 @@
+/* Project Styles */
+
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+// Import Input Field Fix
+@import './input-fix.scss';
+
+// Reset and base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Changed from smooth to auto */
+  height: 100%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #2a2a2a;
+  background-color: #f5f7ff;
+  overflow-x: hidden;
+  height: 100%;
+  position: relative;
+}
+
+/* Ensure all containers start from top */
+#root {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: auto !important;
+}
+
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+// Responsive helpers
+@media (max-width: 768px) {
+  .container {
+    padding: 0 5px;
+  }
+}
+
+// Animation utilities
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px); /* Reduced from 20px to 10px */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Prevent any page-level animations that might cause sliding from bottom */
+* {
+  /* Disable all transforms on page load */
+  transform: none !important;
+}
+
+/* Ensure page content loads from top */
+body, html, #root {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Reset any potential page transitions */
+.page-container, .main-content, .content-wrapper {
+  transform: translateY(0) !important;
+  animation: none !important;
+}
+
+/* Force all pages to start from top without any animation delay */
+.MuiBox-root, .MuiContainer-root, main, .main-layout, .intern-layout, .employer-layout {
+  transform: none !important;
+  animation-delay: 0s !important;
+}
+
+/* Disable any potential footer-to-top sliding animations */
+footer, .footer, .public-footer {
+  position: relative !important;
+  transform: none !important;
+}
+
+/* Ensure React Router outlet starts from top */
+.router-outlet, [role="main"] {
+  transform: translateY(0) !important;
+  margin-top: 0 !important;
+  padding-top: 0;
+}
+
+// Message container styles
+.messages-container {
+  scroll-behavior: auto; /* Changed from smooth to auto */
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+// Notification dropdown styles
+.notification-dropdown {
+  position: relative;
+  z-index: 1300;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ffffff;
+    z-index: 1301;
+    filter: drop-shadow(0 -1px 1px rgba(0, 0, 0, 0.1));
+  }
+  
+  .notification-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #ffffff;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .notification-list {
+    max-height: 200px;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 0 0 8px 8px;
+    
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+  }
+  
+  .notification-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: #f8f9fa;
+    }
+    
+    &.unread {
+      background-color: rgba(51, 102, 255, 0.05);
+      border-left: 3px solid #3366ff;
+    }
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  .notification-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+    margin-right: 8px;
+  }
+  
+  .notification-content {
+    flex: 1;
+    min-width: 0;
+    
+    .notification-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    
+    .notification-message {
+      font-size: 0.75rem;
+      color: #6e6e6e;
+      line-height: 1.1;
+    }
+  }
+  
+  .notification-time {
+    font-size: 0.625rem;
+    color: #a0a0a0;
+    white-space: nowrap;
+  }
+}

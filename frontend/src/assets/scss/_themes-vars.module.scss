@@ -1,0 +1,84 @@
+// Theme Variables
+
+// Light Theme Colors
+$textPrimary: #2a2a2a;
+$textSecondary: #6e6e6e;
+$textDark: #000000;
+$textHint: #a0a0a0;
+$background: #f5f7ff;
+$paper: #ffffff;
+$paperDark: #121212;
+
+// Primary Colors
+$primaryLight: #e3eeff;
+$primary: #3366ff;
+$primaryDark: #1939b7;
+$primary100: #f0f5ff;
+
+// Secondary Colors
+$secondaryLight: #e0f7ff;
+$secondary: #4dd0ff;
+$secondaryDark: #00a8e8;
+
+// Error Colors
+$errorLight: #ef9a9a;
+$error: #f44336;
+$errorDark: #c62828;
+
+// Warning Colors
+$warningLight: #fff3e0;
+$warning: #ff9800;
+$warningDark: #e65100;
+
+// Info Colors
+$infoLight: #e3f2fd;
+$info: #2196f3;
+$infoDark: #0d47a1;
+
+// Success Colors
+$successLight: #e8fadf;
+$success: #4caf50;
+$successDark: #388e3c;
+
+// Grey Colors
+$grey300: #e0e0e0;
+$grey400: #bdbdbd;
+
+// Background Colors
+$bg100: #fafafa;
+
+// Menu Colors
+$menuHover: rgba(51, 102, 255, 0.1);
+
+:export {
+  textPrimary: $textPrimary;
+  textSecondary: $textSecondary;
+  textDark: $textDark;
+  textHint: $textHint;
+  background: $background;
+  paper: $paper;
+  paperDark: $paperDark;
+  primaryLight: $primaryLight;
+  primary: $primary;
+  primaryDark: $primaryDark;
+  primary100: $primary100;
+  secondaryLight: $secondaryLight;
+  secondary: $secondary;
+  secondaryDark: $secondaryDark;
+  errorLight: $errorLight;
+  error: $error;
+  errorDark: $errorDark;
+  warningLight: $warningLight;
+  warning: $warning;
+  warningDark: $warningDark;
+  infoLight: $infoLight;
+  info: $info;
+  infoDark: $infoDark;
+  successLight: $successLight;
+  success: $success;
+  successDark: $successDark;
+  grey300: $grey300;
+  grey400: $grey400;
+  bg100: $bg100;
+  menuHover: $menuHover;
+}

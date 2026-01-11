@@ -1,0 +1,34 @@
+{
+  "short_name": "Internshell",
+  "name": "Internshell - Find Your Perfect Internship",
+  "description": "Connect with internship opportunities and build your career. India's leading internship platform.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "logo192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#3366ff",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "categories": ["business", "education", "productivity"],
+  "lang": "en-IN"
+}

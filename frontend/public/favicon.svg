@@ -1,0 +1,15 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Professional briefcase icon for internship platform -->
+  <rect width="32" height="32" rx="4" fill="#3366ff"/>
+  <g transform="translate(6, 8)">
+    <!-- Briefcase body -->
+    <rect x="2" y="4" width="16" height="10" rx="1" fill="white" stroke="none"/>
+    <!-- Briefcase handle -->
+    <rect x="6" y="2" width="8" height="2" rx="1" fill="none" stroke="white" stroke-width="1.5"/>
+    <!-- Briefcase lock -->
+    <rect x="9" y="7" width="2" height="3" rx="0.5" fill="#3366ff"/>
+    <!-- Professional accent lines -->
+    <line x1="2" y1="8" x2="18" y2="8" stroke="#e3eeff" stroke-width="0.5"/>
+    <line x1="2" y1="10" x2="18" y2="10" stroke="#e3eeff" stroke-width="0.5"/>
+  </g>
+</svg>

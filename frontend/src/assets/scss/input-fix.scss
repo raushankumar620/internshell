@@ -1,0 +1,268 @@
+/* Fix for Material-UI TextField Floating Label Overlap Issue */
+
+/* Main container for all MUI TextField components */
+.MuiFormControl-root {
+  /* Ensure proper spacing for label animation */
+  .MuiInputLabel-root {
+    /* Default positioned label (floating at top when focused) */
+    transform: translate(14px, 16px) scale(1);
+    transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+    
+    /* When focused or has value, label should move up */
+    &.MuiInputLabel-shrink {
+      transform: translate(14px, -9px) scale(0.75) !important;
+      background-color: white;
+      padding: 0 4px;
+      z-index: 1;
+    }
+    
+    /* Ensure label is above the input field */
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  /* Input field styling */
+  .MuiOutlinedInput-root {
+    /* Ensure input text doesn't overlap with floating label */
+    .MuiOutlinedInput-input {
+      padding: 16.5px 14px;
+      
+      /* When input has value, ensure text doesn't overlap with label */
+      &:not(:placeholder-shown) {
+        padding-top: 16.5px;
+      }
+      
+      /* Placeholder text should be hidden when label is present */
+      &::placeholder {
+        opacity: 0;
+        transition: opacity 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
+      }
+      
+      /* Show placeholder only when focused and no label is shrunk */
+      &:focus::placeholder {
+        opacity: 0.6;
+      }
+    }
+    
+    /* Fieldset for outline */
+    .MuiOutlinedInput-notchedOutline {
+      /* Ensure outline doesn't interfere with label */
+      legend {
+        /* Space for the floating label */
+        span {
+          padding: 0 5px;
+        }
+      }
+    }
+    
+    /* When focused, ensure proper spacing */
+    &.Mui-focused {
+      .MuiOutlinedInput-input {
+        &::placeholder {
+          opacity: 0.6;
+        }
+      }
+      
+      /* Label should be elevated */
+      + .MuiInputLabel-root {
+        transform: translate(14px, -9px) scale(0.75) !important;
+      }
+    }
+    
+    /* When error state */
+    &.Mui-error {
+      .MuiInputLabel-root {
+        color: #d32f2f;
+      }
+    }
+  }
+  
+  /* For small size textfields */
+  &.MuiTextField-root .MuiInputBase-sizeSmall {
+    .MuiOutlinedInput-input {
+      padding: 8.5px 14px;
+    }
+    
+    .MuiInputLabel-root {
+      transform: translate(14px, 12px) scale(1);
+      
+      &.MuiInputLabel-shrink {
+        transform: translate(14px, -6px) scale(0.75) !important;
+      }
+    }
+  }
+  
+  /* For multiline text areas */
+  &.MuiTextField-root .MuiOutlinedInput-multiline {
+    .MuiOutlinedInput-input {
+      padding: 16.5px 14px;
+      min-height: auto;
+    }
+    
+    .MuiInputLabel-root {
+      &.MuiInputLabel-shrink {
+        transform: translate(14px, -9px) scale(0.75) !important;
+      }
+    }
+  }
+}
+
+/* Global override to ensure labels work correctly - Most Important Fix */
+.MuiInputLabel-outlined {
+  &.MuiInputLabel-shrink {
+    background: white !important;
+    padding: 0 6px !important;
+    margin-left: -2px;
+    z-index: 2 !important;
+  }
+}
+
+/* Alternative background colors based on parent container */
+.MuiBox-root[style*="background-color: rgb(245, 245, 245)"],
+.MuiBox-root[style*="bgcolor: #f5f5f5"] {
+  .MuiInputLabel-outlined.MuiInputLabel-shrink {
+    background: rgba(245, 245, 245, 1) !important;
+  }
+}
+
+/* Ensure all textfield labels are properly positioned */
+.MuiTextField-root {
+  /* Force recalculation of label position when component has value */
+  &:has(.MuiOutlinedInput-input:not(:placeholder-shown)),
+  &:has(.MuiOutlinedInput-input:focus) {
+    .MuiInputLabel-root {
+      transform: translate(14px, -9px) scale(0.75) !important;
+      background: white !important;
+      padding: 0 6px !important;
+      z-index: 2 !important;
+    }
+  }
+}
+
+/* Specific fixes for Resume Builder components */
+.resume-builder-form {
+  /* Personal Information Fields */
+  .MuiGrid-container .MuiGrid-item {
+    .MuiTextField-root {
+      .MuiInputLabel-root {
+        /* Ensure label doesn't overlap with user input */
+        background: linear-gradient(transparent 50%, white 50%);
+        padding: 0 4px;
+        
+        &.MuiInputLabel-shrink {
+          background: white !important;
+          padding: 0 6px !important;
+          z-index: 2 !important;
+        }
+      }
+    }
+  }
+  
+  /* Skills input field */
+  .skills-section {
+    .MuiTextField-root {
+      .MuiInputLabel-root.MuiInputLabel-shrink {
+        background-color: white !important;
+        padding: 0 8px !important;
+        margin-left: -4px;
+        z-index: 2 !important;
+      }
+    }
+  }
+  
+  /* Experience section inputs */
+  .experience-section {
+    .MuiBox-root {
+      .MuiTextField-root {
+        .MuiInputLabel-root {
+          /* Ensure proper background for floating labels */
+          &.MuiInputLabel-shrink {
+            background: rgba(245, 245, 245, 1) !important;
+            padding: 0 6px !important;
+            margin-left: -2px;
+            z-index: 2 !important;
+          }
+        }
+      }
+    }
+  }
+  
+  /* Education section inputs */
+  .education-section {
+    .MuiTextField-root {
+      .MuiInputLabel-root.MuiInputLabel-shrink {
+        background: rgba(245, 245, 245, 1) !important; /* Match the background color */
+        padding: 0 6px !important;
+        z-index: 2 !important;
+      }
+    }
+  }
+  
+  /* Projects section inputs */
+  .projects-section {
+    .MuiTextField-root {
+      .MuiInputLabel-root.MuiInputLabel-shrink {
+        background: rgba(245, 245, 245, 1) !important;
+        padding: 0 6px !important;
+        z-index: 2 !important;
+      }
+    }
+  }
+  
+  /* Social Links section */
+  .social-links-section {
+    .MuiTextField-root {
+      .MuiInputLabel-root.MuiInputLabel-shrink {
+        background: white !important;
+        padding: 0 6px !important;
+        z-index: 2 !important;
+      }
+    }
+  }
+}
+
+/* Specific fixes for registration and other form pages */
+.registration-form,
+.login-form,
+.profile-form {
+  .MuiTextField-root {
+    .MuiInputLabel-root {
+      &.MuiInputLabel-shrink {
+        background: white !important;
+        padding: 0 6px !important;
+        z-index: 2 !important;
+        margin-left: -2px;
+      }
+    }
+  }
+}
+
+/* Force proper behavior for all TextField components globally */
+.MuiFormControl-root .MuiInputLabel-root {
+  /* Ensure background is always white for shrunk labels */
+  &.Mui-focused,
+  &.MuiFormLabel-filled {
+    background: white !important;
+    padding: 0 6px !important;
+    z-index: 2 !important;
+  }
+}
+
+/* Force proper text field behavior for small screens */
+@media (max-width: 768px) {
+  .MuiTextField-root {
+    .MuiInputLabel-root.MuiInputLabel-shrink {
+      transform: translate(14px, -8px) scale(0.8) !important;
+      background: white !important;
+      padding: 0 5px !important;
+    }
+  }
+}
+
+/* Ensure filled variant also works properly */
+.MuiFilledInput-root {
+  + .MuiInputLabel-root.MuiInputLabel-shrink {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+}
