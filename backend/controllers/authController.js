@@ -8,12 +8,44 @@ const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
+// Helper function to validate employer email domain
+const isValidEmployerEmail = (email) => {
+  const emailLower = email.toLowerCase();
+  
+  // List of invalid domains (personal email providers)
+  const invalidDomains = [
+    '@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', 
+    '@live.com', '@icloud.com', '@protonmail.com', '@aol.com'
+  ];
+  
+  // Check if email uses any invalid personal domains
+  const isPersonalEmail = invalidDomains.some(domain => emailLower.includes(domain));
+  
+  if (isPersonalEmail) {
+    return false;
+  }
+  
+  // Valid corporate domains (must end with these)
+  const validDomains = ['.com', '.in', '.org', '.net', '.co.in', '.edu', '.gov'];
+  
+  // Check if email ends with any valid corporate domain
+  return validDomains.some(domain => emailLower.endsWith(domain));
+};
+
 // @desc    Register new user
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role, phone, companyName } = req.body;
+
+    // Validate employer email domain
+    if (role === 'employer' && !isValidEmployerEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Employers must use a corporate email address with domains like .com, .in, .org, .net, .co.in, .edu, or .gov'
+      });
+    }
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -207,8 +239,11 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('🔐 Login attempt for email:', email);
+
     // Validate email and password
     if (!email || !password) {
+      console.log('❌ Missing email or password');
       return res.status(400).json({
         success: false,
         message: 'Please provide email and password'
@@ -218,18 +253,33 @@ exports.login = async (req, res) => {
     // Check if user exists and get password field
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
+      console.log('❌ User not found for email:', email);
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials'
+        message: 'Invalid email or password. Please check your credentials.'
       });
     }
+
+    console.log('✅ User found:', { email: user.email, role: user.role, isEmailVerified: user.isEmailVerified });
 
     // Check if password matches
     const isPasswordMatch = await user.matchPassword(password);
     if (!isPasswordMatch) {
+      console.log('❌ Password mismatch for email:', email);
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials'
+        message: 'Invalid email or password. Please check your credentials.'
+      });
+    }
+
+    console.log('✅ Password matched');
+
+    // Additional validation for employers
+    if (user.role === 'employer' && !isValidEmployerEmail(user.email)) {
+      console.log('❌ Employer email domain validation failed');
+      return res.status(403).json({
+        success: false,
+        message: 'Employer accounts must use corporate email addresses with domains like .com, .in, .org, .net, .co.in, .edu, or .gov'
       });
     }
 

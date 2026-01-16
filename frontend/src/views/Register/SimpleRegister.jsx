@@ -59,6 +59,30 @@ const SimpleRegisterForm = ({ ...rest }) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [initialRole, setInitialRole] = React.useState('intern');
 
+  // Helper function to validate employer email domain
+  const isValidEmployerEmail = (email) => {
+    const emailLower = email.toLowerCase();
+    
+    // List of invalid domains (personal email providers)
+    const invalidDomains = [
+      '@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com', 
+      '@live.com', '@icloud.com', '@protonmail.com', '@aol.com'
+    ];
+    
+    // Check if email uses any invalid personal domains
+    const isPersonalEmail = invalidDomains.some(domain => emailLower.includes(domain));
+    
+    if (isPersonalEmail) {
+      return false;
+    }
+    
+    // Valid corporate domains (must end with these)
+    const validDomains = ['.com', '.in', '.org', '.net', '.co.in', '.edu', '.gov'];
+    
+    // Check if email ends with any valid corporate domain
+    return validDomains.some(domain => emailLower.endsWith(domain));
+  };
+
   // Get role from URL parameters
   React.useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -113,28 +137,41 @@ const SimpleRegisterForm = ({ ...rest }) => {
 
   return (
     <Box>
-      {/* Google Sign Up Button */}
-      <Box sx={{ mb: 3 }}>
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={handleGoogleError}
-          useOneTap={false}
-          shape="rectangular"
-          theme="outline"
-          size="large"
-          text="signup_with"
-          width="100%"
-        />
-      </Box>
+      {/* Google Sign Up Button - Only for Interns */}
+      {initialRole === 'intern' && (
+        <>
+          <Box sx={{ mb: 3 }}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+              useOneTap={false}
+              shape="rectangular"
+              theme="outline"
+              size="large"
+              text="signup_with"
+              width="100%"
+            />
+          </Box>
 
-      {/* Divider */}
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-        <Divider sx={{ flexGrow: 1 }} />
-        <Typography sx={{ mx: 2, color: 'text.secondary' }}>
-          या
-        </Typography>
-        <Divider sx={{ flexGrow: 1 }} />
-      </Box>
+          {/* Divider */}
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Divider sx={{ flexGrow: 1 }} />
+            <Typography sx={{ mx: 2, color: 'text.secondary' }}>
+              या
+            </Typography>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+        </>
+      )}
+
+      {/* Note for Employers */}
+      {initialRole === 'employer' && (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          <Typography variant="body2">
+            <strong>नियोक्ताओं के लिए नोट:</strong> Gmail, Yahoo, Hotmail जैसे व्यक्तिगत ईमेल का उपयोग नहीं कर सकते। कृपया अपने कॉर्पोरेट ईमेल (.com, .in, .org, .net, .co.in, .edu, .gov) का उपयोग करके मैन्युअल पंजीकरण करें।
+          </Typography>
+        </Alert>
+      )}
 
       <Formik
         key={initialRole}
@@ -149,7 +186,17 @@ const SimpleRegisterForm = ({ ...rest }) => {
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(50).required('नाम आवश्यक है'),
-          email: Yup.string().email('वैध ईमेल होना चाहिए').max(255).required('ईमेल आवश्यक है'),
+          email: Yup.string()
+            .email('वैध ईमेल होना चाहिए')
+            .max(255)
+            .required('ईमेल आवश्यक है')
+            .test('employer-domain', 'नियोक्ता Gmail, Yahoo, Hotmail जैसे व्यक्तिगत ईमेल का उपयोग नहीं कर सकते। कृपया कॉर्पोरेट ईमेल (.com, .in, .org, .net, .co.in, .edu, .gov) का उपयोग करें।', function(value) {
+              const { role } = this.parent;
+              if (role === 'employer' && value) {
+                return isValidEmployerEmail(value);
+              }
+              return true;
+            }),
           password: Yup.string().min(6, 'पासवर्ड कम से कम 6 अक्षर का होना चाहिए').max(255).required('पासवर्ड आवश्यक है'),
           role: Yup.string().required('भूमिका चुनना आवश्यक है'),
           phone: Yup.string(),
@@ -272,7 +319,10 @@ const SimpleRegisterForm = ({ ...rest }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={Boolean(touched.email && errors.email)}
-                helperText={touched.email && errors.email}
+                helperText={
+                  touched.email && errors.email ? errors.email :
+                  values.role === 'employer' ? 'नियोक्ता को कॉर्पोरेट ईमेल (.com, .in, .org, .net, .co.in, .edu, .gov) का उपयोग करना आवश्यक है' : ''
+                }
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">

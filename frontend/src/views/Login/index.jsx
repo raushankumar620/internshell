@@ -97,6 +97,13 @@ export default function Login() {
               <Typography align="center" variant="h4" fontWeight={800} color="#2a2a2a">Welcome Back</Typography>
               <Typography align="center" sx={{ mb:3 }} color="#6e6e6e">Login to continue</Typography>
 
+              {/* Note for Login */}
+              <Alert severity="info" sx={{ mb: 3 }}>
+                <Typography variant="body2">
+                  <strong>Note:</strong> Employers must use corporate emails. Interns can use Google login or manual login.
+                </Typography>
+              </Alert>
+
               <GoogleLogin onSuccess={handleGoogle} onError={()=>setError("Google login failed")} />
 
               <Divider sx={{ my:3, borderColor:"#38bdf8" }}>OR</Divider>
@@ -104,20 +111,31 @@ export default function Login() {
               <Formik
                 initialValues={{ email:"", password:"" }}
                 validationSchema={Yup.object({
-                  email: Yup.string().email().required(),
-                  password: Yup.string().required()
+                  email: Yup.string()
+                    .email('Please enter a valid email address')
+                    .required('Email is required'),
+                  password: Yup.string()
+                    .min(6, 'Password must be at least 6 characters')
+                    .required('Password is required')
                 })}
                 onSubmit={async(values)=>{
                   try{
+                    setError(""); // Clear previous errors
                     const r = await authAPI.login(values);
-                    setSuccess(true);
-                    setTimeout(()=>redirectUser(r.data),1200);
-                  }catch{
-                    setError("Invalid email or password");
+                    if (r.success) {
+                      setSuccess(true);
+                      setTimeout(()=>redirectUser(r.data),1200);
+                    } else if (r.emailVerificationRequired) {
+                      navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
+                    }
+                  }catch(err){
+                    console.error('Login error:', err);
+                    const errorMessage = err.response?.data?.message || "Invalid email or password. Please check your credentials.";
+                    setError(errorMessage);
                   }
                 }}
               >
-              {({handleSubmit, handleChange, values})=>(
+              {({handleSubmit, handleChange, values, errors, touched})=>(
               <form onSubmit={handleSubmit} className="login-form">
 
                 {error && <Alert severity="error" sx={{ mb:2 }}>{error}</Alert>}
@@ -128,6 +146,8 @@ export default function Login() {
                   name="email"
                   onChange={handleChange}
                   value={values.email}
+                  error={touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
                   sx={{ mb:2 }}
                 />
 
@@ -138,6 +158,8 @@ export default function Login() {
                   type={show?"text":"password"}
                   onChange={handleChange}
                   value={values.password}
+                  error={touched.password && !!errors.password}
+                  helperText={touched.password && errors.password}
                   InputProps={{
                     endAdornment:(
                       <InputAdornment position="end">

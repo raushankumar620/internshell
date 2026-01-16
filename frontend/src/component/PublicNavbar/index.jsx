@@ -107,7 +107,25 @@ const PublicNavbar = () => {
 
   const handleInternshipNavigation = (path) => {
     setInternshipOpen(false);
-    navigate(path);
+    
+    if (user?.role === 'employer') {
+      // Employer navigation logic
+      if (path.includes('type=wfh') || path.includes('type=office') || path === '/internship') {
+        navigate('/app/employer/my-internship');
+      } else {
+        navigate(path);
+      }
+    } else if (user?.role === 'intern') {
+      // Intern navigation logic - view available internships
+      if (path === '/internship') {
+        navigate('/internships');
+      } else {
+        navigate('/internships' + path.split('/internship')[1]);
+      }
+    } else {
+      // Non-logged users go to general internship browsing
+      navigate(path.replace('/internship', '/internships'));
+    }
   };
 
   // Scroll trigger for navbar background
@@ -117,8 +135,11 @@ const PublicNavbar = () => {
   });
 
   const menuItems = user ? [
-    // Only show Internship for logged-in users
-    { label: 'Internships', path: '/internships' }
+    // Only show Internship for logged-in users - role-based navigation
+    { 
+      label: 'Internships', 
+      path: user.role === 'employer' ? '/app/employer/my-internship' : '/internships'
+    }
   ] : [
     // Show all menu items for non-logged-in users
     { label: 'Home', path: '/' },
@@ -777,7 +798,15 @@ const PublicNavbar = () => {
                     </ClickAwayListener>
                     
                     <Button
-                      onClick={() => navigate('/app/intern/messages')}
+                      onClick={() => {
+                        if (user?.role === 'employer') {
+                          navigate('/app/employer/messages');
+                        } else if (user?.role === 'intern') {
+                          navigate('/app/intern/messages');
+                        } else {
+                          navigate('/messages'); // fallback
+                        }
+                      }}
                       sx={{
                         color: trigger ? theme.palette.text.primary : 'white',
                         fontSize: '1rem',
