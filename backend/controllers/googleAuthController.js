@@ -56,22 +56,18 @@ exports.googleAuth = async (req, res) => {
     if (user) {
       // User exists, update last login
       user.lastLogin = Date.now();
-      await user.save({ validateBeforeSave: false });
       
-      // Check if user has selected a role
-      if (!user.role || user.role === 'pending') {
-        // User needs to select a role
-        return res.status(200).json({
-          success: true,
-          message: 'Role selection required',
-          data: {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            avatar: user.avatar,
-            roleSelectionRequired: true
-          }
+      // If user doesn't have a role or is employer, restrict access
+      if (!user.role) {
+        user.role = 'intern'; // Set default role as intern for Google users
+        await user.save({ validateBeforeSave: false });
+      } else if (user.role === 'employer') {
+        return res.status(403).json({
+          success: false,
+          message: 'Employers cannot use Google login. Please use manual login with your corporate email.'
         });
+      } else {
+        await user.save({ validateBeforeSave: false });
       }
       
       // Generate token with role
@@ -96,27 +92,24 @@ exports.googleAuth = async (req, res) => {
       user = await User.findOne({ email });
       
       if (user) {
-        // User exists with email, link Google account
+        // User exists with email, link Google account only if they are intern
+        if (user.role === 'employer') {
+          return res.status(403).json({
+            success: false,
+            message: 'Employers cannot use Google login. Please use manual login with your corporate email.'
+          });
+        }
+        
         user.googleId = googleId;
         user.avatar = avatar;
         user.lastLogin = Date.now();
-        await user.save({ validateBeforeSave: false });
         
-        // Check if user has selected a role
-        if (!user.role || user.role === 'pending') {
-          // User needs to select a role
-          return res.status(200).json({
-            success: true,
-            message: 'Role selection required',
-            data: {
-              _id: user._id,
-              name: user.name,
-              email: user.email,
-              avatar: user.avatar,
-              roleSelectionRequired: true
-            }
-          });
+        // Ensure role is intern for Google users
+        if (!user.role) {
+          user.role = 'intern';
         }
+        
+        await user.save({ validateBeforeSave: false });
         
         // Generate token with role
         const token = await generateToken(user._id);
@@ -136,29 +129,34 @@ exports.googleAuth = async (req, res) => {
           }
         });
       } else {
-        // New user, create account with pending role
-        // For Google OAuth users, we don't require a password
+        // New user, create account with intern role only
+        // Google OAuth is only allowed for interns
         const userData = {
           name,
           email,
           googleId,
           avatar,
-          role: 'pending', // Set role as pending until user selects
-          isActive: true
+          role: 'intern', // Force intern role for Google OAuth users
+          isActive: true,
+          isEmailVerified: true // Google accounts are already verified
         };
 
         user = await User.create(userData);
         
-        // Return response indicating role selection is required
+        // Generate token and return user data
+        const token = await generateToken(user._id);
+        
         return res.status(200).json({
           success: true,
-          message: 'Role selection required',
+          message: 'Registration successful',
           data: {
             _id: user._id,
             name: user.name,
             email: user.email,
+            role: user.role,
+            phone: user.phone,
             avatar: user.avatar,
-            roleSelectionRequired: true
+            token
           }
         });
       }
