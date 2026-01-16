@@ -267,7 +267,7 @@ const LandingPage = () => {
               border: '2px solid rgba(37, 99, 235, 0.1)'
             }}
           />
-          
+
           {/* SVG Circular Progress */}
           <svg
             style={{
@@ -321,11 +321,11 @@ const LandingPage = () => {
             }}
           >
             <motion.div
-              animate={{ 
+              animate={{
                 rotate: scrollProgress > 90 ? 180 : 0,
                 y: scrollProgress > 90 ? 0 : [0, 3, 0]
               }}
-              transition={{ 
+              transition={{
                 rotate: { duration: 0.3 },
                 y: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' }
               }}
@@ -342,11 +342,11 @@ const LandingPage = () => {
                   boxShadow: '0 4px 12px rgba(37, 99, 235, 0.4)'
                 }}
               >
-                <KeyboardArrowDownIcon 
-                  sx={{ 
-                    fontSize: { xs: 20, md: 24 }, 
+                <KeyboardArrowDownIcon
+                  sx={{
+                    fontSize: { xs: 20, md: 24 },
                     color: '#fff'
-                  }} 
+                  }}
                 />
               </Box>
             </motion.div>
@@ -474,32 +474,7 @@ const LandingPage = () => {
               transition={{ duration: 0.7, ease: 'easeOut' }}
             >
               <Box sx={{ position: 'relative' }}>
-                {/* Floating Badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                >
-                  <Box
-                    sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      px: 2,
-                      py: 0.8,
-                      mb: 3,
-                      borderRadius: '50px',
-                      background: 'rgba(37, 99, 235, 0.1)',
-                      border: '1px solid rgba(37, 99, 235, 0.2)',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                  >
-                    <AutoAwesomeIcon sx={{ fontSize: 18, color: colors.primary.main }} />
-                    <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: colors.primary.main }}>
-                      #1 Internship Platform in India
-                    </Typography>
-                  </Box>
-                </motion.div>
+               
 
                 <Box sx={{ position: 'relative', zIndex: 1 }}>
                   <Typography
@@ -555,7 +530,7 @@ const LandingPage = () => {
                       variant="contained"
                       size="large"
                       endIcon={<ArrowForwardIcon />}
-                      onClick={() => navigate('/register')}
+                      onClick={() => navigate('/register?role=intern')}
                       sx={{
                         background: colors.primary.gradient,
                         color: 'white',
@@ -575,39 +550,36 @@ const LandingPage = () => {
                         transition: 'all 0.3s ease'
                       }}
                     >
-                      Get Started Free
+                      Join as Intern
                     </Button>
 
                     <Button
                       variant="outlined"
                       size="large"
-                      startIcon={<WorkIcon />}
-                      onClick={() => navigate('/internship')}
+                      endIcon={<Business />}
+                      onClick={() => navigate('/internships')}
                       sx={{
-                        color: colors.secondary.main,
-                        borderColor: colors.secondary.main,
+                        borderColor: colors.primary.main,
+                        color: colors.primary.main,
                         fontSize: { xs: '0.9rem', md: '1rem' },
                         px: { xs: 3, md: 4 },
                         py: { xs: 1.2, md: 1.5 },
                         borderRadius: '50px',
                         fontWeight: 600,
-                        borderWidth: 2,
-                        background: 'rgba(255, 255, 255, 0.8)',
-                        backdropFilter: 'blur(10px)',
                         flex: { xs: '1 1 auto', sm: '0 1 auto' },
                         minWidth: { xs: '45%', sm: 'auto' },
                         '&:hover': {
-                          borderColor: colors.secondary.dark,
-                          backgroundColor: 'rgba(124, 58, 237, 0.08)',
-                          borderWidth: 2,
+                          background: colors.primary.main,
+                          color: 'white',
                           transform: 'translateY(-3px)',
-                          boxShadow: '0 8px 25px rgba(124, 58, 237, 0.2)'
+                          boxShadow: '0 8px 25px rgba(37, 99, 235, 0.35)'
                         },
                         transition: 'all 0.3s ease'
                       }}
                     >
-                      Browse Internships
-                    </Button>
+                      Browse Internships                    </Button>
+
+
                   </Box>
 
                   {/* Trust Indicators */}
@@ -1119,7 +1091,7 @@ const LandingPage = () => {
 
         </Box>
 
-    
+
 
         {/* ================= TESTIMONIAL SECTION ================= */}
         <Box sx={{ py: { xs: 6, md: 12 }, mb: { xs: 6, md: 12 }, overflow: 'hidden', position: 'relative' }}>
@@ -1359,7 +1331,7 @@ const LandingPage = () => {
                             }
                           }
                         }}
-                        onClick={() => navigate('/internship')}
+                        onClick={() => navigate('/internships')}
                       >
                         <CardContent sx={{ p: { xs: 2.5, md: 3 }, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                           {/* Company Name */}
@@ -1525,7 +1497,7 @@ const LandingPage = () => {
                 variant="outlined"
                 size="large"
                 endIcon={<ArrowForwardIcon />}
-                onClick={() => navigate('/internship')}
+                onClick={() => navigate('/internships')}
                 sx={{
                   px: { xs: 4, md: 6 },
                   py: 1.5,
@@ -1551,7 +1523,7 @@ const LandingPage = () => {
           </Container>
         </Box>
 
-            {/* ================= CONTACT SECTION ================= */}
+        {/* ================= CONTACT SECTION ================= */}
         <Box
           sx={{
             mt: { xs: 5, md: 8 },

@@ -2,30 +2,34 @@ import React from 'react';
 import { Box, Typography, Button, Container, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import PublicNavbar from 'component/PublicNavbar';
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{
-      minHeight:'100vh',
-      display:'flex',
-      alignItems:'center',
-      justifyContent:'center',
-      bgcolor:'#020617',
-      position:'relative',
-      overflow:'hidden'
-    }}>
+    <>
+      <PublicNavbar />
+      <Box sx={{
+        minHeight:'100vh',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
+        bgcolor:'#020617',
+        position:'relative',
+        overflow:'hidden',
+        pt: 8 // Add padding top to account for navbar
+      }}>
 
-      {/* SVG BLUR BLOBS */}
-      <svg style={{position:'absolute',width:800,height:800,top:-200,left:-200,filter:'blur(120px)',opacity:.6}}>
-        <circle cx="400" cy="400" r="400" fill="#2563EB"/>
-      </svg>
-      <svg style={{position:'absolute',width:700,height:700,bottom:-200,right:-200,filter:'blur(120px)',opacity:.6}}>
-        <circle cx="350" cy="350" r="350" fill="#EC4899"/>
-      </svg>
+        {/* SVG BLUR BLOBS */}
+        <svg style={{position:'absolute',width:800,height:800,top:-200,left:-200,filter:'blur(120px)',opacity:.6}}>
+          <circle cx="400" cy="400" r="400" fill="#2563EB"/>
+        </svg>
+        <svg style={{position:'absolute',width:700,height:700,bottom:-200,right:-200,filter:'blur(120px)',opacity:.6}}>
+          <circle cx="350" cy="350" r="350" fill="#EC4899"/>
+        </svg>
 
-      <Container maxWidth="sm">
+        <Container maxWidth="sm">
         <motion.div initial={{scale:.6,opacity:0}} animate={{scale:1,opacity:1}} transition={{duration:1}}>
           <Box sx={{
             textAlign:'center',
@@ -83,6 +87,7 @@ const NotFound = () => {
         </motion.div>
       </Container>
     </Box>
+    </>
   );
 };
 

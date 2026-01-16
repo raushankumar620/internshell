@@ -11,7 +11,6 @@ const LandingPage = Loadable(lazy(() => import('views/LandingPage')));
 const Login = Loadable(lazy(() => import('views/Login')));
 const Register = Loadable(lazy(() => import('views/Register')));
 const AuthDemo = Loadable(lazy(() => import('views/AuthDemo')));
-const RoleSelection = Loadable(lazy(() => import('views/RoleSelection')));
 const VerifyEmail = Loadable(lazy(() => import('views/VerifyEmail')));
 const ForgotPassword = Loadable(lazy(() => import('views/ForgotPassword')));
 const ResetPassword = Loadable(lazy(() => import('views/ResetPassword')));
@@ -59,10 +58,6 @@ const OtherAuthRoutes = {
     {
       path: '/auth-demo',
       element: <GuestRoute><AuthDemo /></GuestRoute>
-    },
-    {
-      path: '/role-selection',
-      element: <GuestRoute><RoleSelection /></GuestRoute>
     },
     {
       path: '/verify-email',

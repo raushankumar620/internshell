@@ -138,9 +138,31 @@ const PublicFooter = () => {
           
           {/* Brand & Description */}
           <Grid item xs={12} md={4}>
-            <Typography variant="h4" sx={footerStyles.logo}>
-              Internshell
-            </Typography>
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                mb: 2,
+                '& img': {
+                  filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.2)) brightness(1.1)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.4)) brightness(1.2)',
+                    transform: 'scale(1.05)'
+                  }
+                }
+              }}
+            >
+              <Box
+                component="img"
+                src="/logo.png"
+                alt="Logo"
+                sx={{
+                  height: '40px',
+                  width: 'auto'
+                }}
+              />
+            </Box>
             <Typography sx={{ lineHeight: 1.8, mb: 4, maxWidth: 320 }}>
               Leading the way in digital career transformation. We bridge the gap between ambitious students and world-class organizations.
             </Typography>
@@ -208,7 +230,7 @@ const PublicFooter = () => {
           gap: 2 
         }}>
           <Typography sx={{ fontSize: '0.85rem' }}>
-            © {currentYear} Internshell. Build with  for students.
+            © {currentYear} Your Brand. Build with ❤️ for students.
           </Typography>
           
           <Stack direction="row" spacing={4}>

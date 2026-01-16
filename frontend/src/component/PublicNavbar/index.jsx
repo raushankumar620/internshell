@@ -128,11 +128,7 @@ const PublicNavbar = () => {
     }
   };
 
-  // Scroll trigger for navbar background
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 50
-  });
+  // Scroll trigger for navbar background will be defined later in the component
 
   const menuItems = user ? [
     // Only show Internship for logged-in users - role-based navigation
@@ -170,272 +166,424 @@ const PublicNavbar = () => {
     return location.pathname === path;
   };
 
-  // Mobile Drawer
+  // Enhanced Mobile Slider with smooth animations
   const drawer = (
-    <Box
-      sx={{
-        width: 280,
+    <motion.div
+      style={{
+        width: '100%',
         height: '100%',
         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         color: 'white',
         position: 'relative',
         overflow: 'hidden',
-        '&::before': {
-          content: '""',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.1, duration: 0.2 }}
+    >
+      {/* Animated Background Effect */}
+      <motion.div
+        style={{
           position: 'absolute',
           top: '-50%',
           right: '-50%',
           width: '200%',
           height: '200%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-          animation: 'pulse 4s ease-in-out infinite',
-        },
-        '@keyframes pulse': {
-          '0%, 100%': { transform: 'translate(0, 0)' },
-          '50%': { transform: 'translate(-10%, -10%)' },
-        }
-      }}
-    >
-      <Box
-        sx={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)'
+        }}
+        animate={{
+          rotate: [0, 360]
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'linear'
+        }}
+      />
+      
+      {/* Header Section */}
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.4, type: 'spring' }}
+        style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          p: 2.5,
+          padding: '20px',
           borderBottom: '1px solid rgba(255, 255, 255, 0.15)',
           backdropFilter: 'blur(10px)',
           position: 'relative',
           zIndex: 1
         }}
       >
-        <Typography 
-          variant="h3" 
-          sx={{ 
-            fontWeight: 800, 
-            color: 'white',
-            fontSize: '1.5rem',
-            letterSpacing: '0.5px',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
-          }}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8 }}
         >
-          Internshell 
-        </Typography>
-        <IconButton 
-          onClick={handleDrawerToggle} 
-          sx={{ 
-            color: 'white',
-            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-            width: 40,
-            height: 40,
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.25)',
-              transform: 'rotate(90deg)',
-            }
-          }}
-        >
-          <CloseIcon sx={{ fontSize: '1.5rem' }} />
-        </IconButton>
-      </Box>
-      <List sx={{ mt: 1, position: 'relative', zIndex: 1 }}>
-        {menuItems.map((item, index) => (
-          <ListItem 
-            key={item.label} 
-            disablePadding
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="Logo"
             sx={{
-              animation: `slideIn 0.2s ease-out ${index * 0.05}s both`,
-              '@keyframes slideIn': {
-                from: {
-                  opacity: 0,
-                  transform: 'translateX(20px)'
-                },
-                to: {
-                  opacity: 1,
-                  transform: 'translateX(0)'
-                }
+              height: '40px',
+              width: 'auto',
+              filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3)) brightness(1.1)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.5)) brightness(1.2)',
+                transform: 'scale(1.05)'
+              }
+            }}
+          />
+        </motion.div>
+        <motion.div
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+        >
+          <IconButton 
+            onClick={handleDrawerToggle} 
+            sx={{ 
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              width: 40,
+              height: 40,
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.25)'
               }
             }}
           >
-            <ListItemButton
-              onClick={() => handleNavigation(item.path)}
-              sx={{
-                py: 2,
-                px: 3,
-                mx: 1,
-                my: 0.5,
-                borderRadius: 2,
-                borderLeft: isActive(item.path) ? '4px solid white' : '4px solid transparent',
-                backgroundColor: isActive(item.path) ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                transition: 'all 0.2s ease',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: 'none',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  transform: 'translateX(5px)',
+            <CloseIcon sx={{ fontSize: '1.5rem' }} />
+          </IconButton>
+        </motion.div>
+      </motion.div>
+      
+      {/* Menu List with staggered animations */}
+      <List sx={{ mt: 1, position: 'relative', zIndex: 1, px: 1, flex: 1 }}>
+        {menuItems.map((item, index) => (
+          <motion.div
+            key={item.label}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ 
+              delay: 0.1 + (index * 0.1), 
+              duration: 0.4,
+              type: 'spring',
+              stiffness: 100
+            }}
+            whileHover={{ scale: 1.02, x: 8 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <ListItem disablePadding sx={{ mb: 0.5 }}>
+              <ListItemButton
+                onClick={() => handleNavigation(item.path)}
+                sx={{
+                  py: 2.5,
+                  px: 3,
+                  borderRadius: 3,
+                  borderLeft: isActive(item.path) ? '4px solid white' : '4px solid transparent',
+                  backgroundColor: isActive(item.path) ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    '&::before': {
+                      transform: 'translateX(0)'
+                    }
+                  },
                   '&::before': {
-                    transform: 'translateX(0)',
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)',
+                    transform: 'translateX(-100%)',
+                    transition: 'transform 0.6s ease'
                   }
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
-                  transform: 'translateX(-100%)',
-                  transition: 'transform 0.4s ease',
-                }
-              }}
-            >
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontSize: '1.05rem',
-                  fontWeight: isActive(item.path) ? 700 : 500,
-                  letterSpacing: '0.5px'
                 }}
-              />
-            </ListItemButton>
-          </ListItem>
+              >
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontWeight: isActive(item.path) ? 700 : 500,
+                    fontSize: '1.1rem',
+                    color: 'white'
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </motion.div>
         ))}
-      </List>
-      <Box 
-        sx={{ 
-          position: 'absolute', 
-          bottom: 0, 
-          width: '100%', 
-          p: 3,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.2), transparent)',
-          backdropFilter: 'blur(5px)',
-          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-          zIndex: 1
-        }}
-      >
-        {!user ? (
-          <>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => handleNavigation('/register?role=employer')}
-              sx={{
-                backgroundColor: 'white',
-                color: theme.palette.primary.main,
-                py: 2,
-                mb: 1.5,
-                fontWeight: 700,
-                fontSize: '1.1rem',
-                borderRadius: 3,
-                boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
-                textTransform: 'none',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                '&:hover': {
-                  backgroundColor: '#f8f9fa',
-                  transform: 'translateY(-3px) scale(1.02)',
-                  boxShadow: '0 8px 25px rgba(0,0,0,0.25)',
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
-                },
-                '&:active': {
-                  transform: 'translateY(-1px) scale(0.98)'
-                }
-              }}
-            >
-              For Employers
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => handleNavigation('/register?role=intern')}
-              sx={{
-                color: 'white',
-                borderColor: 'white',
-                py: 2,
-                fontWeight: 700,
-                fontSize: '1.1rem',
-                borderWidth: 2,
-                borderRadius: 3,
-                textTransform: 'none',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: 'white',
-                  borderWidth: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 4px 12px rgba(255,255,255,0.2)'
-                }
-              }}
-            >
-              For Interns
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                handleDashboard();
-                setMobileOpen(false);
-              }}
-              sx={{
-                mb: 2,
-                backgroundColor: 'white',
-                color: theme.palette.primary.main,
-                py: 1.75,
-                fontWeight: 700,
-                fontSize: '1.05rem',
-                borderRadius: 2,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                textTransform: 'none',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 16px rgba(0,0,0,0.4)'
-                }
-              }}
-            >
-              Dashboard
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => {
-                handleLogout();
-                setMobileOpen(false);
-              }}
-              sx={{
-                color: 'white',
-                borderColor: 'white',
-                py: 1.75,
-                fontWeight: 700,
-                fontSize: '1.05rem',
-                borderWidth: 2,
-                borderRadius: 2,
-                textTransform: 'none',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: 'white',
-                  borderWidth: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 4px 12px rgba(255,255,255,0.2)'
-                }
-              }}
-            >
-              Logout
-            </Button>
-          </>
+        
+        {/* User Profile Section in Mobile */}
+        {user && (
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            style={{ marginTop: '20px', paddingBottom: '20px' }}
+          >
+            <Box sx={{ px: 3, py: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 2,
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: 3,
+                  backdropFilter: 'blur(10px)'
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 45,
+                    height: 45,
+                    backgroundColor: 'white',
+                    color: theme.palette.primary.main,
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem'
+                  }}
+                >
+                  {user?.firstName?.charAt(0) || user?.name?.charAt(0) || 'U'}
+                </Avatar>
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ 
+                      fontWeight: 700, 
+                      color: 'white',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    {user?.firstName || user?.name || 'User'}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ 
+                      color: 'rgba(255, 255, 255, 0.8)',
+                      fontSize: '0.85rem',
+                      textTransform: 'capitalize'
+                    }}
+                  >
+                    {user?.role || 'User'}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            
+            {/* Quick Actions for logged users */}
+            <Box sx={{ px: 3 }}>
+              <motion.div
+                whileHover={{ scale: 1.02, x: 8 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Box sx={{ mb: 1 }}>
+                  <ListItemButton
+                    onClick={() => {
+                      handleDashboard();
+                      setMobileOpen(false);
+                    }}
+                    sx={{
+                      py: 2,
+                      px: 3,
+                      borderRadius: 3,
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)'
+                      }
+                    }}
+                  >
+                    <DashboardIcon sx={{ color: 'white', fontSize: '1.3rem' }} />
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '1rem',
+                        color: 'white'
+                      }}
+                    >
+                      Dashboard
+                    </Typography>
+                  </ListItemButton>
+                </Box>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.02, x: 8 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Box sx={{ mb: 1 }}>
+                  <ListItemButton
+                    onClick={() => {
+                      if (user?.role === 'employer') {
+                        navigate('/app/employer/messages');
+                      } else if (user?.role === 'intern') {
+                        navigate('/app/intern/messages');
+                      }
+                      setMobileOpen(false);
+                    }}
+                    sx={{
+                      py: 2,
+                      px: 3,
+                      borderRadius: 3,
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)'
+                      }
+                    }}
+                  >
+                    <MessageIcon sx={{ color: 'white', fontSize: '1.3rem' }} />
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '1rem',
+                        color: 'white'
+                      }}
+                    >
+                      Messages
+                    </Typography>
+                  </ListItemButton>
+                </Box>
+              </motion.div>
+              
+              <motion.div
+                whileHover={{ scale: 1.02, x: 8 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Box>
+                  <ListItemButton
+                    onClick={() => {
+                      handleLogout();
+                      setMobileOpen(false);
+                    }}
+                    sx={{
+                      py: 2,
+                      px: 3,
+                      borderRadius: 3,
+                      backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      '&:hover': {
+                        backgroundColor: 'rgba(244, 67, 54, 0.3)'
+                      }
+                    }}
+                  >
+                    <LogoutIcon sx={{ color: '#ff6b6b', fontSize: '1.3rem' }} />
+                    <Typography
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '1rem',
+                        color: '#ff6b6b'
+                      }}
+                    >
+                      Logout
+                    </Typography>
+                  </ListItemButton>
+                </Box>
+              </motion.div>
+            </Box>
+          </motion.div>
         )}
-      </Box>
-    </Box>
+        
+        {/* Action Buttons for non-logged users */}
+        {!user && (
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.4 }}
+            style={{ 
+              margin: '20px', 
+              marginTop: 'auto',
+              paddingBottom: '40px'
+            }}
+          >
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => {
+                    handleNavigation('/register?role=employer');
+                    setMobileOpen(false);
+                  }}
+                  sx={{
+                    backgroundColor: 'white',
+                    color: theme.palette.primary.main,
+                    py: 1.5,
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    borderRadius: 3,
+                    textTransform: 'none',
+                    boxShadow: '0 4px 12px rgba(255, 255, 255, 0.2)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      transform: 'translateY(-1px)',
+                      boxShadow: '0 6px 16px rgba(255, 255, 255, 0.3)'
+                    }
+                  }}
+                >
+                  For Employers
+                </Button>
+              </motion.div>
+              
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => {
+                    handleNavigation('/register?role=intern');
+                    setMobileOpen(false);
+                  }}
+                  sx={{
+                    borderColor: 'white',
+                    color: 'white',
+                    py: 1.5,
+                    fontWeight: 600,
+                    fontSize: '1rem',
+                    borderRadius: 3,
+                    borderWidth: 2,
+                    textTransform: 'none',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      borderColor: 'white',
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  For Interns
+                </Button>
+              </motion.div>
+            </Box>
+          </motion.div>
+        )}
+      </List>
+    </motion.div>
   );
+
+  // Scroll trigger for navbar background
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: window
+  });
 
   return (
     <>
@@ -473,22 +621,25 @@ const PublicNavbar = () => {
               }}
               onClick={() => handleNavigation('/')}
             >
-              <Typography
-                variant="h2"
+              <Box
+                component="img"
+                src="/logo.png"
+                alt="Logo"
                 sx={{
-                  fontWeight: 800,
-                  fontSize: { xs: '1.5rem', md: '2rem' },
-                  background: trigger
-                    ? `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`
-                    : 'linear-gradient(135deg, #ffffff 0%, #ffffff 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  textShadow: trigger ? 'none' : '2px 2px 4px rgba(0,0,0,0.2)'
+                  height: { xs: '35px', md: '45px' },
+                  width: 'auto',
+                  filter: trigger 
+                    ? 'drop-shadow(0 0 8px rgba(25,118,210,0.4)) brightness(1.1)'
+                    : 'drop-shadow(0 0 12px rgba(255,255,255,0.6)) brightness(1.2)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    filter: trigger 
+                      ? 'drop-shadow(0 0 15px rgba(25,118,210,0.6)) brightness(1.2) saturate(1.2)'
+                      : 'drop-shadow(0 0 20px rgba(255,255,255,0.8)) brightness(1.3) saturate(1.1)',
+                    transform: 'scale(1.05)'
+                  }
                 }}
-              >
-                Internshell
-              </Typography>
+              />
             </motion.div>
 
             {/* Desktop Menu - Full Width */}
@@ -951,79 +1102,131 @@ const PublicNavbar = () => {
               </Box>
             )}
 
-            {/* Mobile Menu Icon */}
+            {/* Enhanced Mobile Menu Icon */}
             {isMobile && (
               <motion.div
-                initial={{ opacity: 0, rotate: -180 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ 
+                  duration: 0.5,
+                  type: 'spring',
+                  stiffness: 260,
+                  damping: 20 
+                }}
               >
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="end"
-                  onClick={handleDrawerToggle}
-                  sx={{
-                    color: trigger ? theme.palette.text.primary : 'white',
-                    backgroundColor: trigger 
-                      ? 'rgba(25, 118, 210, 0.1)' 
-                      : 'rgba(255, 255, 255, 0.15)',
-                    width: 48,
-                    height: 48,
-                    borderRadius: 2,
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      backgroundColor: trigger 
-                        ? 'rgba(25, 118, 210, 0.2)' 
-                        : 'rgba(255, 255, 255, 0.25)',
-                      transform: 'scale(1.05)',
-                    },
-                    '&:active': {
-                      transform: 'scale(0.95)',
-                    }
-                  }}
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
-                  <motion.div
-                    animate={{ rotate: mobileOpen ? 90 : 0 }}
-                    transition={{ duration: 0.3 }}
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="end"
+                    onClick={handleDrawerToggle}
+                    sx={{
+                      color: trigger ? theme.palette.text.primary : 'white',
+                      backgroundColor: trigger 
+                        ? 'rgba(25, 118, 210, 0.1)' 
+                        : 'rgba(255, 255, 255, 0.15)',
+                      width: 48,
+                      height: 48,
+                      borderRadius: 3,
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      border: `1px solid ${trigger 
+                        ? 'rgba(25, 118, 210, 0.2)' 
+                        : 'rgba(255, 255, 255, 0.2)'}`,
+                      backdropFilter: 'blur(10px)',
+                      '&:hover': {
+                        backgroundColor: trigger 
+                          ? 'rgba(25, 118, 210, 0.2)' 
+                          : 'rgba(255, 255, 255, 0.25)',
+                        borderColor: trigger 
+                          ? 'rgba(25, 118, 210, 0.4)' 
+                          : 'rgba(255, 255, 255, 0.4)',
+                        boxShadow: trigger 
+                          ? '0 8px 25px rgba(25, 118, 210, 0.3)' 
+                          : '0 8px 25px rgba(255, 255, 255, 0.2)',
+                        transform: 'translateY(-2px)'
+                      },
+                      '&:active': {
+                        transform: 'translateY(0px) scale(0.95)'
+                      }
+                    }}
                   >
-                    <MenuIcon sx={{ fontSize: '1.8rem' }} />
-                  </motion.div>
-                </IconButton>
+                    <motion.div
+                      animate={{ 
+                        rotate: mobileOpen ? 180 : 0,
+                        scale: mobileOpen ? 1.1 : 1
+                      }}
+                      transition={{ 
+                        duration: 0.3,
+                        type: 'spring',
+                        stiffness: 200 
+                      }}
+                    >
+                      <MenuIcon sx={{ 
+                        fontSize: '1.8rem',
+                        filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                      }} />
+                    </motion.div>
+                  </IconButton>
+                </motion.div>
               </motion.div>
             )}
           </Toolbar>
         </Container>
       </AppBar>
 
-      {/* Mobile Drawer */}
-      <Drawer
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true // Better open performance on mobile
-        }}
-        sx={{
-          '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
-            width: 280,
-            boxShadow: '-8px 0 24px rgba(0, 0, 0, 0.3)',
-          },
-          '& .MuiBackdrop-root': {
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(4px)',
-          }
-        }}
-        transitionDuration={{
-          enter: 250,
-          exit: 200
-        }}
-      >
-        {drawer}
-      </Drawer>
+      {/* Mobile Slider with Framer Motion */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            {/* Custom Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                backdropFilter: 'blur(2px)',
+                zIndex: 1200
+              }}
+              onClick={handleDrawerToggle}
+            />
+            
+            {/* Animated Slider */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ 
+                type: 'tween',
+                duration: 0.3,
+                ease: 'easeInOut'
+              }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '80vw',
+                maxWidth: 320,
+                zIndex: 1300,
+                boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.2)'
+              }}
+            >
+              {drawer}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };

@@ -555,7 +555,7 @@ const InternLanding = () => {
               fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' }
             }}
           >
-            Hi, {user?.firstName || 'Raushan'}! 👋
+            Hi, {user?.firstName || 'there'}! 👋
           </Typography>
           <Typography 
             variant="h6" 

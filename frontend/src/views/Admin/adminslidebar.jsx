@@ -181,31 +181,21 @@ const AdminSidebar = ({
       >
         {open && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Avatar
+            <Box
+              component="img"
+              src="/logo.png"
+              alt="Logo"
               sx={{
-                width: 32,
-                height: 32,
-                background: `linear-gradient(45deg, ${theme.palette.secondary.main}, ${theme.palette.secondary.dark})`,
-                fontWeight: 'bold',
-                fontSize: '0.875rem',
+                height: '32px',
+                width: 'auto',
+                filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3)) brightness(1.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.5)) brightness(1.2)',
+                  transform: 'scale(1.05)'
+                }
               }}
-            >
-              IS
-            </Avatar>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                fontSize: '1.1rem',
-                background: `linear-gradient(45deg, ${theme.palette.common.white}, ${alpha(theme.palette.secondary.light, 0.8)})`,
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              InternShell
-            </Typography>
+            />
           </Box>
         )}
         <IconButton

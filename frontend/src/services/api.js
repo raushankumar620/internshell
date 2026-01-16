@@ -56,12 +56,45 @@ api.interceptors.response.use(
 export const authAPI = {
   // Register new user
   register: async (userData) => {
-    const response = await api.post('/auth/register', userData);
-    if (response.data.success && response.data.data.token) {
-      localStorage.setItem('token', response.data.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.data));
+    try {
+      console.log('📝 Attempting registration with API:', API_URL);
+      
+      // Add timeout to the request
+      const response = await api.post('/auth/register', userData, {
+        timeout: 30000 // 30 seconds timeout
+      });
+      
+      console.log('✅ Registration successful:', response.data);
+      
+      if (response.data.success && response.data.data && response.data.data.token) {
+        localStorage.setItem('token', response.data.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.data));
+      }
+      return response.data;
+    } catch (error) {
+      console.error('❌ Registration API Error:', {
+        message: error.message,
+        code: error.code,
+        status: error.response?.status,
+        data: error.response?.data,
+        config: {
+          url: error.config?.url,
+          baseURL: error.config?.baseURL,
+          timeout: error.config?.timeout
+        }
+      });
+      
+      // If it's a timeout or network error, throw a more descriptive error
+      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+        throw new Error('Registration request timed out. The server may be busy. Please try again.');
+      }
+      
+      if (error.message === 'Network Error') {
+        throw new Error('Unable to connect to server. Please check your internet connection.');
+      }
+      
+      throw error;
     }
-    return response.data;
   },
 
   // Login user
