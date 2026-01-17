@@ -16,8 +16,9 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  process.env.CORS_ORIGIN,
+  ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : []),
   'https://internshell.com',
+  'https://internshell-dev.web.app',
   'http://localhost:3000',
   'http://localhost:3001'
 ].filter(Boolean);

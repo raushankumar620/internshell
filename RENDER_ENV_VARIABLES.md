@@ -11,8 +11,11 @@ MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/internshell
 JWT_SECRET=generate_a_strong_32_character_secret_key
 JWT_EXPIRE=30d
 
-# CORS (Required) - Your frontend URL
-CORS_ORIGIN=https://internshell-dev.web.app
+# CORS (Required) - Your frontend URLs (comma-separated)
+CORS_ORIGIN=https://internshell-dev.web.app,https://internshell.com
+
+# Frontend URL (for email verification links)
+FRONTEND_URL=https://internshell-dev.web.app
 
 # Email (Required for notifications)
 EMAIL_HOST=smtp.gmail.com
